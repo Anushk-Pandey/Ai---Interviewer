@@ -1,0 +1,40 @@
+{
+  "name": "genai-interview",
+  "version": "1.0.0",
+  "description": "Full-stack Generative AI Interview Preparation Platform with modern frontend and scalable backend. Users can practice AI-generated interview questions, receive intelligent feedback, track progress, and manage sessions. Built with secure authentication, real-time interactions, and efficient APIs for seamless learning and interview preparation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harsh28Pandey/gen-ai-interview.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Harsh28Pandey/gen-ai-interview/issues"
+  },
+  "homepage": "https://github.com/Harsh28Pandey/gen-ai-interview#readme",
+  "dependencies": {
+    "@google/genai": "^1.48.0",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "groq-sdk": "^1.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.4",
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14",
+    "pdf-parse": "^1.1.1",
+    "puppeteer": "^24.40.0",
+    "zod": "^4.3.6",
+    "zod-to-json-schema": "^3.25.2"
+  }
+}
