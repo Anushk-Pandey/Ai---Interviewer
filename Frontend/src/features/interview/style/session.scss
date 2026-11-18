@@ -820,3 +820,301 @@ $severity-low: #3fb950;
     color: $text-muted;
   }
 }
+
+// ── Voice, Persona, and Enhanced Interactivity Styles ──────────────────────────
+.brand-badge-small {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+
+  strong {
+    background: linear-gradient(135deg, #ff2d78, #ff758c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.session-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  .progress-container {
+    flex: 1;
+  }
+
+  .voice-toggles {
+    display: flex;
+    align-items: center;
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: $bg-card;
+      border: 1px solid $border-color;
+      padding: 0.65rem 1rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: $text-primary;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: $accent;
+      }
+
+      input[type="checkbox"] {
+        accent-color: $accent;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+// Interviewer Persona Header
+.interviewer-persona {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: $bg-panel;
+  border: 1px solid $border-color;
+  padding: 0.9rem 1.2rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  .interviewer-avatar {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2a3348, #161b22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $border-color;
+
+    .persona-emoji {
+      font-size: 1.4rem;
+    }
+
+    .avatar-status-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid $bg-panel;
+
+      &.status--ready {
+        background-color: #3fb950;
+      }
+      &.status--speaking {
+        background-color: $accent;
+        animation: pulse 1s infinite;
+      }
+      &.status--listening {
+        background-color: #00bcd4;
+        animation: pulse 1s infinite;
+      }
+    }
+  }
+
+  .interviewer-meta {
+    flex: 1;
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .interviewer-status {
+      margin: 0.2rem 0 0 0;
+      font-size: 0.8rem;
+      color: $text-muted;
+
+      .speaking-anim {
+        color: $accent;
+        font-weight: 600;
+      }
+
+      .listening-anim {
+        color: #00bcd4;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .audio-btn {
+    background-color: $bg-card;
+    border: 1px solid $border-color;
+    color: $text-primary;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $accent;
+      color: $accent;
+    }
+
+    &--active {
+      background-color: rgba($accent, 0.15);
+      border-color: $accent;
+      color: $accent;
+    }
+
+    .sound-wave {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 14px;
+
+      span {
+        display: block;
+        width: 3px;
+        background-color: $accent;
+        border-radius: 2px;
+        animation: soundWave 0.6s ease-in-out infinite alternate;
+
+        &:nth-child(1) { height: 6px; animation-delay: 0.1s; }
+        &:nth-child(2) { height: 14px; animation-delay: 0.3s; }
+        &:nth-child(3) { height: 8px; animation-delay: 0.2s; }
+      }
+    }
+  }
+}
+
+@keyframes soundWave {
+  from { height: 4px; }
+  to { height: 14px; }
+}
+
+// Answer Header & Timer
+.answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+
+  .answer-title-group {
+    h3 {
+      margin: 0 0 0.2rem 0;
+      font-size: 1.15rem;
+      color: #fff;
+    }
+    .response-hint {
+      margin: 0;
+      font-size: 0.825rem;
+      color: $text-muted;
+    }
+  }
+
+  .answer-timer-badge {
+    background-color: $bg-panel;
+    border: 1px solid $border-color;
+    padding: 0.35rem 0.7rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e6edf3;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.live-listening-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: rgba(#00bcd4, 0.12);
+  border: 1px solid rgba(#00bcd4, 0.3);
+  color: #00bcd4;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.825rem;
+  margin-bottom: 0.75rem;
+
+  .pulsing-mic-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #00bcd4;
+    animation: pulse 1s infinite;
+  }
+}
+
+.voice-unsupported-note {
+  font-size: 0.8rem;
+  color: #f5a623;
+  margin: 0.5rem 0;
+}
+
+// Score Badges
+.score-badge--excellent .score-val { color: #3fb950 !important; }
+.score-badge--good .score-val { color: #00bcd4 !important; }
+.score-badge--fair .score-val { color: #f5a623 !important; }
+.score-badge--poor .score-val { color: #ff4d4d !important; }
+
+.q-type-badge {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+
+  &.badge--tech {
+    background-color: rgba(#ffc107, 0.15);
+    color: #ffc107;
+  }
+
+  &.badge--beh {
+    background-color: rgba(#00bcd4, 0.15);
+    color: #00bcd4;
+  }
+}
+
+.results-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media print {
+  .session-header__actions,
+  .results-header__actions,
+  .top-nav,
+  button {
+    display: none !important;
+  }
+
+  .session-page,
+  .results-page {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+  }
+
+  .results-dashboard-card,
+  .takeaways-card,
+  .q-result-card {
+    background: #fff !important;
+    border: 1px solid #ddd !important;
+    color: #000 !important;
+    box-shadow: none !important;
+  }
+}

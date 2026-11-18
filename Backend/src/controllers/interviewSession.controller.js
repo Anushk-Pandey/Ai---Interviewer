@@ -8,14 +8,11 @@ const { evaluateAnswer, generateOverallSessionFeedback } = require("../services/
 async function startSessionController(req, res) {
     try {
         const { reportId } = req.body
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ message: "Unauthorized: user not found" })
-        }
         if (!reportId) {
             return res.status(400).json({ message: "reportId is required" })
         }
 
-        const report = await interviewReportModel.findOne({ _id: reportId, user: req.user.id })
+        const report = await interviewReportModel.findById(reportId)
         if (!report) {
             return res.status(404).json({ message: "Interview plan report not found" })
         }
@@ -45,7 +42,7 @@ async function startSessionController(req, res) {
 
         const session = await interviewSessionModel.create({
             interviewReport: report._id,
-            user: req.user.id,
+            user: req.user ? req.user.id : null,
             status: "active",
             currentQuestionIndex: 0,
             questions
@@ -68,11 +65,8 @@ async function startSessionController(req, res) {
 async function getSessionController(req, res) {
     try {
         const { sessionId } = req.params
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ message: "Unauthorized: user not found" })
-        }
 
-        const session = await interviewSessionModel.findOne({ _id: sessionId, user: req.user.id })
+        const session = await interviewSessionModel.findById(sessionId)
             .populate("interviewReport", "title jobDescription")
         if (!session) {
             return res.status(404).json({ message: "Interview session not found" })
@@ -97,14 +91,11 @@ async function submitAnswerController(req, res) {
         const { sessionId } = req.params
         const { userAnswer } = req.body
 
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ message: "Unauthorized" })
-        }
         if (userAnswer === undefined || userAnswer === null) {
             return res.status(400).json({ message: "userAnswer is required" })
         }
 
-        const session = await interviewSessionModel.findOne({ _id: sessionId, user: req.user.id })
+        const session = await interviewSessionModel.findById(sessionId)
         if (!session) {
             return res.status(404).json({ message: "Interview session not found" })
         }
@@ -167,11 +158,8 @@ async function submitAnswerController(req, res) {
 async function completeSessionController(req, res) {
     try {
         const { sessionId } = req.params
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ message: "Unauthorized" })
-        }
 
-        const session = await interviewSessionModel.findOne({ _id: sessionId, user: req.user.id })
+        const session = await interviewSessionModel.findById(sessionId)
         if (!session) {
             return res.status(404).json({ message: "Interview session not found" })
         }

@@ -9,6 +9,23 @@ const puppeteer = require("puppeteer")
 // })
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+const AI_MODEL = process.env.AI_MODEL || "openai/gpt-oss-120b"
+
+function extractAndParseJson(text) {
+    if (!text || typeof text !== "string") {
+        throw new Error("Empty AI response");
+    }
+    let cleaned = text.trim();
+    if (cleaned.startsWith("```")) {
+        cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
+    }
+    const firstBrace = cleaned.indexOf("{");
+    const lastBrace = cleaned.lastIndexOf("}");
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+    }
+    return JSON.parse(cleaned);
+}
 
 const interviewReportSchema = z.object({
     matchScore: z.number().describe("A score between 0 and 100 indicating how well the candidate's profile matches the job describe"),
@@ -117,7 +134,7 @@ Job Description: ${jobDescription}
         // console.log("RAW AI RESPONSE:", JSON.stringify(raw, null, 2))
 
         const response = await groq.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
+            model: AI_MODEL,
             messages: [
                 {
                     role: "system",
@@ -130,7 +147,7 @@ Job Description: ${jobDescription}
             max_tokens: 4000,
         });
 
-        const raw = JSON.parse(response.choices[0].message.content);
+        const raw = extractAndParseJson(response.choices[0].message.content);
         // console.log("RAW AI RESPONSE:", JSON.stringify(raw, null, 2));
         const parsed = interviewReportSchema.safeParse(raw);
 
@@ -151,7 +168,10 @@ Job Description: ${jobDescription}
 }
 
 async function generatePdfFromHtml(htmlContent) {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    })
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: "networkidle0" })
 
@@ -188,20 +208,8 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
                         The resume should not be so lengthy, it should ideally be 1-2 pages long when converted to PDF. Focus on quality rather than quantity and make sure to include all the relevant information that can increase the candidate's chances of getting an interview call for the given job description.
                     `
 
-    // const response = await ai.models.generateContent({
-    //     model: "gemini-2.0-flash",
-    //     contents: prompt,
-    //     config: {
-    //         responseMimeType: "application/json",
-    //         responseSchema: zodToJsonSchema(resumePdfSchema),
-    //     }
-    // })
-
-
-    // const jsonContent = JSON.parse(response.text)
-
     const response = await groq.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
+        model: AI_MODEL,
         messages: [
             {
                 role: "system",
@@ -214,7 +222,7 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
         max_tokens: 4000,
     })
 
-    const jsonContent = JSON.parse(response.choices[0].message.content)
+    const jsonContent = extractAndParseJson(response.choices[0].message.content)
     const pdfBuffer = await generatePdfFromHtml(jsonContent.html)
 
     return pdfBuffer
@@ -252,7 +260,7 @@ Return ONLY valid JSON. No explanations, no backticks, no markdown.
 `;
 
         const response = await groq.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
+            model: AI_MODEL,
             messages: [
                 {
                     role: "system",
@@ -265,7 +273,7 @@ Return ONLY valid JSON. No explanations, no backticks, no markdown.
             max_tokens: 2000,
         });
 
-        const raw = JSON.parse(response.choices[0].message.content);
+        const raw = extractAndParseJson(response.choices[0].message.content);
         const parsed = answerEvaluationSchema.safeParse(raw);
 
         if (!parsed.success) {
@@ -331,7 +339,7 @@ Return ONLY valid JSON. No explanations, no backticks, no markdown.
 `;
 
         const response = await groq.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
+            model: AI_MODEL,
             messages: [
                 {
                     role: "system",
@@ -344,7 +352,7 @@ Return ONLY valid JSON. No explanations, no backticks, no markdown.
             max_tokens: 3000,
         });
 
-        const raw = JSON.parse(response.choices[0].message.content);
+        const raw = extractAndParseJson(response.choices[0].message.content);
         const parsed = sessionFeedbackSchema.safeParse(raw);
 
         if (!parsed.success) {

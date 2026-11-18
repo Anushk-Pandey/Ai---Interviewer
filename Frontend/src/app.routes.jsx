@@ -1,14 +1,16 @@
 import { createBrowserRouter } from "react-router";
 import Login from "./features/auth/pages/Login";
 import Register from "./features/auth/pages/Register";
-import Protected from "./features/auth/components/Protected";
 import Home from "./features/interview/pages/Home";
 import Interview from "./features/interview/pages/Interview";
 import InterviewSessionPage from "./features/interview/pages/InterviewSessionPage";
 import InterviewSessionResultsPage from "./features/interview/pages/InterviewSessionResultsPage";
 
-
 export const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Home />
+    },
     {
         path: "/login",
         element: <Login />
@@ -18,19 +20,15 @@ export const router = createBrowserRouter([
         element: <Register />
     },
     {
-        path: "/",
-        element: <Protected><Home /></Protected>
-    },
-    {
         path: "/interview/:interviewId",
-        element: <Protected><Interview /></Protected>
+        element: <Interview />
     },
     {
         path: "/interview/session/:sessionId",
-        element: <Protected><InterviewSessionPage /></Protected>
+        element: <InterviewSessionPage />
     },
     {
         path: "/interview/session/:sessionId/results",
-        element: <Protected><InterviewSessionResultsPage /></Protected>
+        element: <InterviewSessionResultsPage />
     }
 ])
